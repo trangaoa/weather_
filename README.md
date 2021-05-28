@@ -9,6 +9,7 @@ App thời tiết sử dụng API của Open Weather (https://openweathermap.org
 và API bản đồ WEMAP, API do giảng viên cung cấp
 
 2. Giao diện chính
+3. 
 ![image](https://user-images.githubusercontent.com/57657974/119958805-955c7f00-bfcd-11eb-8af7-e26cdd7f7e08.png)
 
 3. Giao diện thông tin
@@ -36,7 +37,15 @@ và API bản đồ WEMAP, API do giảng viên cung cấp
 ![image](https://user-images.githubusercontent.com/57657974/119960634-5c250e80-bfcf-11eb-927f-86ecf8c50ef0.png)
 
 9. Click nút Back quay lại giao diện WEMAP, nút Add để thêm vào danh sách địa điểm
-Thông báo thêm thành công: ![image](https://user-images.githubusercontent.com/57657974/119960891-a4443100-bfcf-11eb-81c7-3e32951fe9e0.png)
-Thông báo đã tồn tại: ![image](https://user-images.githubusercontent.com/57657974/119961384-2f252b80-bfd0-11eb-8009-817e35b04409.png)
-Giao diện sau khi thêm thành công: ![image](https://user-images.githubusercontent.com/57657974/119960974-baea8800-bfcf-11eb-8e3a-0ff129bf719b.png)
+Thông báo thêm thành công: 
+
+![image](https://user-images.githubusercontent.com/57657974/119960891-a4443100-bfcf-11eb-81c7-3e32951fe9e0.png)
+
+Thông báo đã tồn tại: 
+
+![image](https://user-images.githubusercontent.com/57657974/119961384-2f252b80-bfd0-11eb-8009-817e35b04409.png)
+
+Giao diện sau khi thêm thành công: 
+
+![image](https://user-images.githubusercontent.com/57657974/119960974-baea8800-bfcf-11eb-8e3a-0ff129bf719b.png)
 
