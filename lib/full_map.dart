@@ -103,7 +103,7 @@ class FullMapState extends State<FullMap> {
     weatherLocation.sunrise = formatTime(sunrise);
     weatherLocation.sunset = formatTime(sunset);
 
-    //weatherLocation.city = result['name'];
+    weatherLocation.city = result['name'];
     weatherLocation.dateTime = formattedDay.toString();
     weatherLocation.temperature = temperature.toStringAsFixed(1) + '\u2103';
     weatherLocation.weatherType = weather[0]['main'].toString();
