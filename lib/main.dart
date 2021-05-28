@@ -3,7 +3,7 @@ import 'weather_app.dart';
 import 'package:wemapgl/wemapgl.dart' as WEMAP;
 
 void main() {
-  WEMAP.Configuration.setWeMapKey('GqfwrZUEfxbwbnQUhtBMFivEysYIxelQ');
+  WEMAP.Configuration.setWeMapKey(YOUR_WEMAP_KEY);
   runApp(MyApp());
 }
 
