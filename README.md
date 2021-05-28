@@ -9,7 +9,7 @@ App thời tiết sử dụng API của Open Weather (https://openweathermap.org
 và API bản đồ WEMAP, API do giảng viên cung cấp
 
 2. Giao diện chính
-3. 
+
 ![image](https://user-images.githubusercontent.com/57657974/119958805-955c7f00-bfcd-11eb-8af7-e26cdd7f7e08.png)
 
 3. Giao diện thông tin
@@ -31,6 +31,10 @@ và API bản đồ WEMAP, API do giảng viên cung cấp
 7. Tìm kiếm địa chỉ bằng bản đồ WEMAP, giao diện WEMAP
 
 ![image](https://user-images.githubusercontent.com/57657974/119960231-f3d62d00-bfce-11eb-9923-fdf399270fe1.png)
+
+WEMAP KEY API nhập vào đây, trong file main.dart
+
+![image](https://user-images.githubusercontent.com/57657974/119962110-eae65b00-bfd0-11eb-9808-d524d5f3c47c.png)
 
 8. Click vào một điểm trên bản đồ, sẽ hiện ra giao diện sau
 
