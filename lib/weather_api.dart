@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wemapgl_example/full_map.dart';
 import 'package:wemapgl_example/weather_app.dart';
 import 'weather_location.dart';
-import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class WeatherApi extends StatelessWidget {
   WeatherLocation weatherLocation = WeatherLocation();
   WeatherApi(this.weatherLocation);
@@ -16,23 +14,12 @@ class WeatherApi extends StatelessWidget {
   Widget build(BuildContext context) {
     weatherLocation.bgimg = 'assets/rainy.jpg';
     var description = weatherLocation.description.toString().replaceAll(' ', '');
-    weatherLocation.bgimg = 'assets/$description.jpeg';
 
-    // if (weatherLocation.description == 'clear sky'){
-    //   weatherLocation.bgimg = 'assets/clearsky.png';
-    // } else if (weatherLocation.description == 'scattered clouds'){
-    //   weatherLocation.bgimg = 'assets/scatteredclouds.jpeg';
-    // } else if (weatherLocation.description == 'broken clouds'){
-    //   weatherLocation.bgimg = 'assets/brokenclouds.jpeg';
-    // } else if (weatherLocation.description == 'overcast clouds'){
-    //   weatherLocation.bgimg = 'assets/overcastclouds.jpg';
-    // } else if (weatherLocation.description == 'light rain'){
-    //   weatherLocation.bgimg = 'assets/lightrain.jpeg';
-    // } else if (weatherLocation.description == 'heavy intensity rain'){
-    //   weatherLocation.bgimg = 'assets/heavyintensityrain.jpg';
-    // } else if (weatherLocation.description == 'moderate rain'){
-    //   weatherLocation.bgimg = 'assets/moderatetrain.jpg';
-    // } else weatherLocation.bgimg = 'assets/rainy.jpg';
+    if (weatherLocation.status == 'night'){
+      weatherLocation.bgimg = 'assets/bgimg/${weatherLocation.weatherType}night.jpeg';
+    } else {
+      weatherLocation.bgimg = 'assets/bgimg/$description.jpeg';
+    }
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -148,7 +135,7 @@ class WeatherApi extends StatelessWidget {
                                       color: Colors.white,
                                     ),
                                     SizedBox(width: 10,),
-                                    Text('${weatherLocation.weatherType}', style: GoogleFonts.lato(
+                                    Text('${weatherLocation.description}', style: GoogleFonts.lato(
                                       fontSize: 25,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.white,

@@ -3,8 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'weather_location.dart';
 
+// ignore: must_be_immutable
 class SingleWeather extends StatelessWidget {
-  //final int index;
   WeatherLocation weatherLocation = WeatherLocation();
   SingleWeather(this.weatherLocation);
 

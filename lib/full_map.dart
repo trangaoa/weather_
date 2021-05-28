@@ -64,35 +64,49 @@ class FullMapState extends State<FullMap> {
 
     var wind = result['wind'];
 
-    var unix_timestamp_VN = result['dt'] - 25200 + result['timezone'];
-    String formattedDay = formatDay(unix_timestamp_VN);
+    var unixTimestampVN = result['dt'] - 25200 + result['timezone'];
+    String formattedDay = formatDay(unixTimestampVN);
 
     var temperature = main['temp']/10;
 
     var coord = result['coord'];
-    var feel_like = main['feels_like']/10;
-    var temp_min = main['temp_min']/10;
-    var temp_max = main['temp_max']/10;
+    var feelLike = main['feels_like']/10;
+    var tempMin = main['temp_min']/10;
+    var tempMax = main['temp_max']/10;
     var sys = result['sys'];
     var sunrise = sys['sunrise'] - 25200 + result['timezone'];
     var sunset = sys['sunset'] - 25200 + result['timezone'];
 
+    var dateSunset = new DateTime.fromMillisecondsSinceEpoch(sunset*1000);
+    var dateSunrise = new DateTime.fromMillisecondsSinceEpoch(sunrise*1000);
+    var date = new DateTime.fromMillisecondsSinceEpoch(unixTimestampVN*1000);
+
+    weatherLocation.sunrise = formatTime(sunrise);
+    if (date.hour > dateSunset.hour || date.hour < dateSunrise.hour) {
+      weatherLocation.status = 'night';
+      weatherLocation.iconUrl = 'assets/icon/${weatherLocation.weatherType.toString().replaceAll(' ', '')}night.svg';
+    } else if (date.hour == dateSunset.hour || date.hour == dateSunrise.hour) {
+      weatherLocation.status = 'sunrise';
+      weatherLocation.iconUrl = 'assets/icon/sunrise.svg';
+    } else {
+      weatherLocation.iconUrl = 'assets/icon/${weatherLocation.description.toString().replaceAll(' ', '')}.svg';
+    }
+
     weatherLocation.lat = coord['lat'];
     weatherLocation.lon = coord['lon'];
-    weatherLocation.feel_like = feel_like.toStringAsFixed(1) + '\u2103';
-    weatherLocation.temp_min = temp_min.toStringAsFixed(1) + '\u2103';
-    weatherLocation.temp_max = temp_max.toStringAsFixed(1) + '\u2103';
+    weatherLocation.feel_like = feelLike.toStringAsFixed(1) + '\u2103';
+    weatherLocation.temp_min = tempMin.toStringAsFixed(1) + '\u2103';
+    weatherLocation.temp_max = tempMax.toStringAsFixed(1) + '\u2103';
     weatherLocation.pressure = main['pressure'];
     weatherLocation.visibility = result['visibility'];
     weatherLocation.wind_deg = wind['deg'];
     weatherLocation.sunrise = formatTime(sunrise);
     weatherLocation.sunset = formatTime(sunset);
 
-    weatherLocation.city = result['name'];
+    //weatherLocation.city = result['name'];
     weatherLocation.dateTime = formattedDay.toString();
     weatherLocation.temperature = temperature.toStringAsFixed(1) + '\u2103';
     weatherLocation.weatherType = weather[0]['main'].toString();
-    weatherLocation.iconUrl = 'assets/${weatherLocation.weatherType}.svg';
     weatherLocation.wind = wind['speed'];
     if (weatherLocation.weatherType == 'Rain') {
       var rain = result['rain'];
@@ -109,8 +123,8 @@ class FullMapState extends State<FullMap> {
         + '\n' + weatherLocation.rain.toString() + '\n' + weatherLocation.humidity.toString());
   }
 
-  String formatDay(unix_timestamp){
-    var date = new DateTime.fromMillisecondsSinceEpoch(unix_timestamp*1000);
+  String formatDay(unixTimestamp){
+    var date = new DateTime.fromMillisecondsSinceEpoch(unixTimestamp*1000);
     var hours = "0" + date.hour.toString();
     var minutes = "0" + date.minute.toString();
     var seconds = "0" + date.second.toString();
@@ -128,8 +142,8 @@ class FullMapState extends State<FullMap> {
     return formattedDay;
   }
 
-  String formatDate(unix_timestamp){
-    var date = new DateTime.fromMillisecondsSinceEpoch(unix_timestamp*1000);
+  String formatDate(unixTimestamp){
+    var date = new DateTime.fromMillisecondsSinceEpoch(unixTimestamp*1000);
     var day = '0' + date.day.toString();
     var month = '0' + date.month.toString();
 
@@ -137,8 +151,8 @@ class FullMapState extends State<FullMap> {
     return formattedDate;
   }
 
-  String formatTime(unix_timestamp){
-    var date = new DateTime.fromMillisecondsSinceEpoch(unix_timestamp*1000);
+  String formatTime(unixTimestamp){
+    var date = new DateTime.fromMillisecondsSinceEpoch(unixTimestamp*1000);
     var hours = "0" + date.hour.toString();
     var minutes = "0" + date.minute.toString();
     var seconds = "0" + date.second.toString();
@@ -155,7 +169,7 @@ class FullMapState extends State<FullMap> {
       body: Stack(
         children: <Widget>[
           WeMap(
-            onMapClick: (point, latlng, _place) async {
+            onMapClick: (point, latLng, _place) async {
               WeatherLocation weatherLocation = WeatherLocation();
               place = _place;
               var placeJSON = place.fullJSON;

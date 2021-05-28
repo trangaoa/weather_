@@ -9,6 +9,7 @@ class WeatherLocation {
   String temperature;
   String weatherType;
   String description = 'clear sky';
+  String status;
   String iconUrl;
   var wind, rain;
   int humidity;
@@ -40,7 +41,7 @@ final locationList = [
     dateTime: '10:42:38 - Sunday, 16 May 2021',
     temperature: '30.3\u2103',
     weatherType: 'Clouds',
-    iconUrl: 'assets/moon.svg',
+    iconUrl: 'assets/icon/overcastclouds.svg',
     wind: 3.6,
     rain: 50,
     humidity: 84,
@@ -50,7 +51,7 @@ final locationList = [
       dateTime: '10:31:21 - Sunday, 16 May 2021',
       temperature: '31\u2103',
       weatherType: 'Night',
-      iconUrl: 'assets/moon.svg',
+      iconUrl: 'assets/icon/overcastclouds.svg',
       wind: 34, rain: 43,
       humidity: 89,
   ),
@@ -59,7 +60,7 @@ final locationList = [
     dateTime: '02:20 PM — Monday, 9 Nov 2020',
     temperature: '15\u2103',
     weatherType: 'Cloudy',
-    iconUrl: 'assets/cloudy.svg',
+    iconUrl: 'assets/icon/overcastclouds.svg',
     wind: 4,
     rain: 7,
     humidity: 82,
@@ -69,7 +70,7 @@ final locationList = [
     dateTime: '09:20 AM — Monday, 9 Nov 2020',
     temperature: '17\u2103',
     weatherType: 'Sunny',
-    iconUrl: 'assets/sun.svg',
+    iconUrl: 'assets/icon/overcastclouds.svg',
     wind: 5,
     rain: 15,
     humidity: 61,

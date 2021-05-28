@@ -48,17 +48,6 @@ class _WeatherAppState extends State<WeatherApp> {
 
     List<dynamic> resultHourly = result['hourly'];
 
-    for (int i = 0; i < 24; i++) {
-      List<dynamic> timeWeather = resultHourly[i + 1]['weather'];
-      var timeMain = timeWeather[0]['main'].toString();
-      TimeDetails timer = TimeDetails(
-        time: formatTime(resultHourly[i + 1]['dt']),
-        icon: 'assets/$timeMain.svg',
-        temperature: (resultHourly[i + 1]['temp']/10).toStringAsFixed(1) + '\u2103',
-      );
-      weatherLocation.timeDetails.add(timer);
-    }
-
     var time = - 25200 + result['timezone_offset'];
     var resultCurrent = result['current'];
 
@@ -86,24 +75,57 @@ class _WeatherAppState extends State<WeatherApp> {
     weatherLocation.temp_max_2d = (temp_2d['max']/10).toStringAsFixed(1) + '\u2103';
     weatherLocation.dt_2d = formatDate(result_2d['dt'] + time).toString();
 
-    var unixTimestampVN = resultCurrent['dt'] + time;
-    String formattedDay = formatDay(unixTimestampVN);
-
-    var feelLike = resultCurrent['feels_like']/10;
-
     var sunrise = resultCurrent['sunrise'] + time;
     var sunset = resultCurrent['sunset'] + time;
-    weatherLocation.feel_like = feelLike.toStringAsFixed(1) + '\u2103';
-    weatherLocation.pressure = resultCurrent['pressure'];
-    weatherLocation.visibility = resultCurrent['visibility'];
-    weatherLocation.wind_deg = resultCurrent['wind_deg'];
+
+    var dateSunset = new DateTime.fromMillisecondsSinceEpoch(sunset*1000);
+    var dateSunrise = new DateTime.fromMillisecondsSinceEpoch(sunrise*1000);
+    var date = new DateTime.fromMillisecondsSinceEpoch(resultCurrent['dt']*1000);
+
     weatherLocation.sunrise = formatTime(sunrise);
+    if (date.hour > dateSunset.hour || date.hour < dateSunrise.hour) {
+      weatherLocation.status = 'night';
+      weatherLocation.iconUrl = 'assets/icon/${weatherLocation.weatherType.toString().replaceAll(' ', '')}night.svg';
+    } else if (date.hour == dateSunset.hour || date.hour == dateSunrise.hour) {
+      weatherLocation.status = 'sunrise';
+      weatherLocation.iconUrl = 'assets/icon/sunrise.svg';
+    }
+
     weatherLocation.sunset = formatTime(sunset);
+
+    for (int i = 0; i < 24; i++) {
+      List<dynamic> timeWeather = resultHourly[i + 1]['weather'];
+      var timeDt = resultHourly[i + 1]['dt'] + time;
+      var dateTimeDt = new DateTime.fromMillisecondsSinceEpoch(timeDt*1000);
+      var timeDescription = timeWeather[0]['description'].toString().replaceAll(' ', '');
+      var timeMain = timeWeather[0]['main'].toString();
+      var iconTime;
+      Color color;
+
+      if (dateTimeDt.hour > dateSunset.hour || dateTimeDt.hour < dateSunrise.hour){
+        iconTime = 'assets/icon/${timeMain}night.svg';
+        color = Colors.yellowAccent;
+      } else if (dateTimeDt.hour == dateSunset.hour || dateTimeDt.hour == dateSunrise.hour) {
+        iconTime = 'assets/icon/sunrise.svg';
+        color = Colors.deepOrange;
+      } else {
+        iconTime = 'assets/icon/$timeDescription.svg';
+        color = Colors.cyanAccent;
+      }
+
+      TimeDetails timer = TimeDetails(
+        time: formatTime(timeDt),
+        icon: iconTime,
+        temperature: (resultHourly[i + 1]['temp']/10).toStringAsFixed(1) + '\u2103',
+        color: color,
+      );
+      weatherLocation.timeDetails.add(timer);
+    }
+
     weatherLocation.dew_point = resultCurrent['dew_point'];
     weatherLocation.uvi = resultCurrent['uvi'];
 
     weatherLocation.dt = formatDate(resultCurrent['dt']);
-    weatherLocation.dateTime = formattedDay.toString();
   }
 
   void fetchLocation(WeatherLocation weatherLocation) async{
@@ -131,24 +153,24 @@ class _WeatherAppState extends State<WeatherApp> {
 
     var wind = result['wind'];
 
-    var unix_timestamp_VN = result['dt'] - 25200 + result['timezone'];
-    String formattedDay = formatDay(unix_timestamp_VN);
+    var unixTimestampVN = result['dt'] - 25200 + result['timezone'];
+    String formattedDay = formatDay(unixTimestampVN);
 
     var temperature = main['temp']/10;
 
     var coord = result['coord'];
-    var feel_like = main['feels_like']/10;
-    var temp_min = main['temp_min']/10;
-    var temp_max = main['temp_max']/10;
+    var feelLike = main['feels_like']/10;
+    var tempMin = main['temp_min']/10;
+    var tempMax = main['temp_max']/10;
     var sys = result['sys'];
     var sunrise = sys['sunrise'] - 25200 + result['timezone'];
     var sunset = sys['sunset'] - 25200 + result['timezone'];
 
     weatherLocation.lat = coord['lat'];
     weatherLocation.lon = coord['lon'];
-    weatherLocation.feel_like = feel_like.toStringAsFixed(1) + '\u2103';
-    weatherLocation.temp_min = temp_min.toStringAsFixed(1) + '\u2103';
-    weatherLocation.temp_max = temp_max.toStringAsFixed(1) + '\u2103';
+    weatherLocation.feel_like = feelLike.toStringAsFixed(1) + '\u2103';
+    weatherLocation.temp_min = tempMin.toStringAsFixed(1) + '\u2103';
+    weatherLocation.temp_max = tempMax.toStringAsFixed(1) + '\u2103';
     weatherLocation.pressure = main['pressure'];
     weatherLocation.visibility = result['visibility'];
     weatherLocation.wind_deg = wind['deg'];
@@ -160,7 +182,7 @@ class _WeatherAppState extends State<WeatherApp> {
     weatherLocation.temperature = temperature.toStringAsFixed(1) + '\u2103';
     weatherLocation.weatherType = weather[0]['main'].toString();
     weatherLocation.description = weather[0]['description'];
-    weatherLocation.iconUrl = 'assets/${weatherLocation.weatherType}.svg';
+    weatherLocation.iconUrl = 'assets/icon/${weatherLocation.description.toString().replaceAll(' ', '')}.svg';
     weatherLocation.wind = wind['speed'] * 3.6;
 
     if (weatherLocation.weatherType == 'Rain') {
@@ -172,8 +194,6 @@ class _WeatherAppState extends State<WeatherApp> {
     } else if (weatherLocation.weatherType == 'Clear') {
       weatherLocation.rain = 20;
     }
-
-    //print(weatherLocation.rain);
 
     weatherLocation.humidity = main['humidity'];
     // print(weatherLocation.city + '\n' + weatherLocation.dateTime + '\n' + weatherLocation.temperature
@@ -229,8 +249,15 @@ _onPageChanged(int index){
 
   @override
   Widget build(BuildContext context) {
-    var description = locationList[_currentPage].description.toString().replaceAll(' ', '');
-    bgimg = 'assets/$description.jpeg';
+    WeatherLocation wl = locationList[_currentPage];
+    var description = wl.description.toString().replaceAll(' ', '');
+    if (wl.status == 'night'){
+      bgimg = 'assets/bgimg/${wl.weatherType}night.jpeg';
+    } else if  (wl.status == 'sunrise'){
+      bgimg = 'assets/bgimg/${wl.weatherType}sunrise.jpeg';
+    } else{
+      bgimg = 'assets/bgimg/$description.jpeg';
+    }
 
     void choiceAction(String choice){
       if (choice == Constants.details){
@@ -238,9 +265,9 @@ _onPageChanged(int index){
           context,
           MaterialPageRoute(builder: (context) => SingleDetails(_currentPage)),
         );
-        print('Get details of ${locationList[_currentPage].city}');
+        print('Get details of ${wl.city}');
       } else if (choice == Constants.delete){
-        print('Delete ${locationList[_currentPage].city} from location list');
+        print('Delete ${wl.city} from location list');
         locationList.removeAt(_currentPage);
       }
     }

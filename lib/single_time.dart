@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wemapgl_example/time_details.dart';
-import 'weather_location.dart';
 
+// ignore: must_be_immutable
 class SingleTime extends StatelessWidget {
   //final int index;
   TimeDetails timeDetails = TimeDetails();
@@ -57,7 +57,7 @@ class SingleTime extends StatelessWidget {
                         '${timeDetails.icon}',
                         width: 30,
                         height: 30,
-                        color: Colors.cyanAccent,
+                        color: timeDetails.color,
                       ),
                       SizedBox(height: 5,),
                       Text(
